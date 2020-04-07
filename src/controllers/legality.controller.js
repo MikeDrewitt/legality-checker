@@ -3,9 +3,6 @@
 const { fetchCards } = require("../utils/cardLookup.util");
 const { validateBoard, validateFormat, validateLegality } = require("../validators/legality.validator");
 
-// Constants
-const { commandZoneFormats, sideboardFormats } = require("../constants/formats.constants");
-
 async function post(req, res, next) {
   const { body } = req;
   const { mainboard, sideboard, commandZone, format } = body;
@@ -15,8 +12,8 @@ async function post(req, res, next) {
     const validatedFormat = validateFormat(format);
 
     const validatedMainboard = validateBoard(mainboard);
-    const validatedCommandZone = commandZoneFormats.includes(validatedFormat) ? validateBoard(commandZone) : [];
-    const validatedSideboard = sideboardFormats.includes(validatedFormat) ? validateBoard(sideboard) : [];
+    const validatedCommandZone = validateBoard(commandZone);
+    const validatedSideboard = validateBoard(sideboard);
 
     const [ mainboardCards, sideboardCards, commandZoneCards ] = await Promise.all([
       fetchCards(validatedMainboard),

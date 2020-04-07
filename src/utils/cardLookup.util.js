@@ -19,9 +19,35 @@ function fetchCards(cards = []) {
     if (!card.id) throw new Error(`Missing ID at index ${index}`);
 
     return axios.get(SCRY_API_URL + card.id).then(res => {
-      return { ...res.data, quantity: card.quantity };
+      // TODO - We can probably remove the serialization
+      // I'm adding it such that we cut down the amount of actual logistics
+      // needed in the actual legality checking
+      return { ...serializeScryfall(res.data), quantity: card.quantity };
     });
   }));
+}
+
+
+/**
+ * This function is used to convert scryfall's card structure into something a bit nicer for us to deal with.
+ * Doing this after the request is returned allows us to cut down on the gross string parsing in the legality checkers
+ * themselves.
+ *
+ * @param {Object} scryfallCard - RAW JSON object of a card returned from scryfall
+ *    - example json https://api.scryfall.com/cards/3a1d0dad-18a8-489e-ac11-08f64b72fda4?format=json&pretty=true
+ * @returns {Object} - legalityCardObject
+ */
+function serializeScryfall(scryfallCard) {
+  return {
+    name: scryfallCard["name"],
+    cmc: scryfallCard["cmc"],
+    manaCost: scryfallCard["mana_cost"],
+    oracleText: scryfallCard["oracle_text"],
+    colors: scryfallCard["colors"],
+    colorIdentity: scryfallCard["color_identity"],
+    typeLine: scryfallCard["type_line"],
+    legalities: scryfallCard["legalities"],
+  };
 }
 
 module.exports = {

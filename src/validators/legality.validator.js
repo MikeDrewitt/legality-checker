@@ -1,5 +1,6 @@
 
 const { allowedFormats } = require("../constants/formats.constants");
+const formats = require("./formats/format.rollup");
 
 /**
  * Checks the format of the board and returns the board if there are no errors.
@@ -32,11 +33,17 @@ function validateFormat(userFormat = "") {
  *
  * @param {Object} deck - { mainboard: Array<Card>, sideboard?: Array<Card>, commandZone?: Array>Card> }
  * @param {String} format - TODO - figure out a good way to check this format
+ *
+ * @returns {{
+ *  errors: Array<String>,
+ *  warnings: Array<String>,
+ * }}
  */
 function validateLegality(deck, format) {
-    const errors = [];
-    const warnings = [];
+    const legalityChecker = formats[format];
+    if (typeof legalityChecker !== "function") throw new Error("Cannot find leglity checker for unknown format");
 
+    const { errors, warnings } = legalityChecker(deck);
     return { errors, warnings };
 }
 
