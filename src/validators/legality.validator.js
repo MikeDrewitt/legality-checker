@@ -32,7 +32,7 @@ function validateFormat(userFormat = "") {
  * Function that checks the legality of a deck
  *
  * @param {Object} deck - { mainboard: Array<Card>, sideboard?: Array<Card>, commandZone?: Array>Card> }
- * @param {String} format - TODO - figure out a good way to check this format
+ * @param {String} format - game format
  *
  * @returns {{
  *  errors: Array<String>,
