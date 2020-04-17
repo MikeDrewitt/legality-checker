@@ -6,15 +6,15 @@ const Messages = require("../../utils/messages.utils");
 const messages = require("../../constants/legality.constants");
 
 // Rules
-const { ruleBreakingCards, ruleBreakingCommanders } = require("../../rules/index.rules");
-const commanderRules = require("../../rules/commander.rules");
+const { unlimitedCopies, ruleBreakingCommanders } = require("../../rules/index.rules");
+const rules = require("../../rules/commander.rules");
 
 /**
  * Legality checker for commander
  * The order of this logic is fairly ridged. Be sure to understand fully why the code is orderd the way that it is
  * before making changes
  *
- * @params {Object - {mainboard, sideboard, maybeboard}}
+ * @params {Object - { mainboard, sideboard, maybeboard }
  */
 module.exports = function(deck) {
 
@@ -38,7 +38,7 @@ module.exports = function(deck) {
         // If we the commander isn't included in the mainboard that's a request format error, so we're going to throw
         // rather than returning an error object, request will 400
         if (!mainboard.filter(card => card.name === commander.name).length)
-            throw new Error(`Expecting '${commander.name}' to appear in mainboard as well as command zone`);
+            throw new Error(`${messages.COMMANDER_REQUIRED_IN_MAINBOARD} - ${commander.name}`);
 
         commandZoneQuantity += parseInt(commander.quantity);
 
@@ -46,6 +46,7 @@ module.exports = function(deck) {
         if (commander.legalities.commander !== "legal") errors.push(messages.ILLEGAL_CARD, commander);
 
         for (const color of commander.colorIdentity) commanderColorIdentity[color] = true;
+
 
         // We don't do any specific checks if the commanders are part of the unique rule breaking subset
         // Continue the loop if we found one of those commanders
@@ -61,19 +62,14 @@ module.exports = function(deck) {
         if (typeLine.indexOf("creature") === -1) errors.push(messages.CREATURE_COMMANDER, commander);
     }
 
-    if (commandZoneExceptions.length) commanderRules(commandZoneExceptions, errors);
+    if (commandZoneExceptions.length) rules.commanderRules(commandZoneExceptions, errors);
+    else if (commandZoneQuantity === 0) errors.push(messages.MISSING_COMMANDER);
     else if (commandZoneQuantity > 1) errors.push(messages.SINGLE_COMMANDER);
 
     // MAINBOARD LOGIC
     for (const card of mainboard) {
         mainboardQuantity += parseInt(card.quantity);
 
-        if (ruleBreakingCards[card.name]) {
-            mainboardExceptions.push(card);
-            continue;
-        }
-
-        if (card.quantity > 1) errors.push(messages.SINGLETON_FORMAT, card);
         if (card.legalities.commander !== "legal") errors.push(messages.ILLEGAL_CARD, card);
 
         // Check that the colors of the cards match the color identities of the commander(s)
@@ -81,9 +77,17 @@ module.exports = function(deck) {
         for (const color of card.colorIdentity) {
             if (!commanderColorIdentity[color]) errors.push(messages.OUTSIDE_COLOR_IDENTITY, card);
         }
+
+        if (unlimitedCopies[card.name]) {
+            mainboardExceptions.push(card);
+            continue;
+        }
+
+        if (card.quantity > 1) errors.push(messages.SINGLETON_FORMAT, card);
     }
 
+    if (mainboardExceptions.length) rules.mainboardRules(mainboardExceptions, errors);
     if (mainboardQuantity !== 100) errors.push(messages.EDH_EXPECTED_DECK_SIZE);
 
     return { errors: errors.data, warnings: warnings.data };
-}
+};

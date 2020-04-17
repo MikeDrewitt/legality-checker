@@ -1,106 +1,11 @@
 
 const { altCommanders } = require("./altCommanders.rules");
 const { partners } = require("./partners.rules");
-
-const ruleBreakingCards = {
-    // Basics
-    'Forest': true,
-    'Island': true,
-    'Mountain': true,
-    'Plains': true,
-    'Snow-Covered Forest': true,
-    'Snow-Covered Island': true,
-    'Snow-Covered Mountain': true,
-    'Snow-Covered Plains': true,
-    'Snow-Covered Swamp': true,
-    'Swamp': true,
-    'Wastes': true,
-
-    // Partners
-    'Akiri, Line-Slinger': true,
-    'Blaring Captain': true,
-    'Blaring Recruiter': true,
-    'Brallin, Skyshark Rider': true,
-    'Bruse Tarl, Boorish Herder': true,
-    'Cazur, Ruthless Stalker': true,
-    'Chakram Retriever': true,
-    'Chakram Slinger': true,
-    'Gorm the Great': true,
-    'Haldan, Avid Arcanist': true,
-    'Ikra Shidiqi, the Usurper': true,
-    'Impetuous Protege': true,
-    'Ishai, Ojutai Dragonspeaker': true,
-    'Khorvath Brightflame': true,
-    "Kraum, Ludevic's Opus": true,
-    'Krav, the Unredeemed': true,
-    'Kydele, Chosen of Kruphix': true,
-    'Ley Weaver': true,
-    'Lore Weaver': true,
-    'Ludevic, Necro-Alchemist': true,
-    'Nikara, Lair Scavenger': true,
-    'Okaun, Eye of Chaos': true,
-    'Pako, Arcane Retriever': true,
-    'Pir, Imaginative Rascal': true,
-    'Proud Mentor': true,
-    'Ravos, Soultender': true,
-    'Regna, the Redeemer': true,
-    'Reyhan, Last of the Abzan': true,
-    'Shabraz, the Skyshark': true,
-    'Sidar Kondo of Jamuraa': true,
-    'Silas Renn, Seeker Adept': true,
-    'Silvar, Devourer of the Free': true,
-    'Soulblade Corrupter': true,
-    'Soulblade Renewer': true,
-    'Sylvia Brightspear': true,
-    'Tana, the Bloodsower': true,
-    'Thrasios, Triton Hero': true,
-    'Toothy, Imaginary Friend': true,
-    'Trynn, Champion of Freedom': true,
-    'Tymna the Weaver': true,
-    'Ukkima, Stalking Shadow': true,
-    'Vial Smasher the Fierce': true,
-    'Virtus the Veiled': true,
-
-    // Alt Commanders
-    'Yannik, Scavenging Sentinel': true,
-    'Zndrsplt, Eye of Wisdom': true,
-    'Aminatou, the Fateshifter': true,
-    'Daretti, Scrap Savant': true,
-    'Estrid, the Masked': true,
-    "Freyalise, Llanowar's Fury": true,
-    'Lord Windgrace': true,
-    'Nahiri, the Lithomancer': true,
-    'Ob Nixilis of the Black Oath': true,
-    'Rowan Kenrith': true,
-    'Saheeli, the Gifted': true,
-    'Teferi, Temporal Archmage': true,
-    'The Grand Calcutron': true,
-    'Will Kenrith': true,
-    "Bear's Companion": true,
-    "Cathar's Companion": true,
-    'Gyruda, Doom of Depths': true,
-    "Initiate's Companion": true,
-    'Keruga, the Macrosage': true,
-    'Lurrus of the Dream-Den': true,
-    'Lutri, the Spellchaser': true,
-    'Mowu, Loyal Companion': true,
-    'Obosh, With The Leggies': true,
-    'Trusty Companion': true,
-    'Umori, the Collector': true,
-
-    // Multiple Copies
-    'Persistent Petitioners': true,
-    'Rat Colony': true,
-    'Relentless Rats': true,
-    'Shadowborn Apostle': true,
-
-    // Dwarves
-    'Seven Dwarves': true,
-};
+const { unlimitedCopies } = require("./unlimitedCopies.rules");
 
 const ruleBreakingCommanders = { ...altCommanders, ...partners };
 
 module.exports = {
-    ruleBreakingCards,
     ruleBreakingCommanders,
+    unlimitedCopies,
 };

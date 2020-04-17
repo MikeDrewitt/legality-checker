@@ -1,5 +1,7 @@
 
 const { allowedFormats } = require("../constants/formats.constants");
+const errors = require("../constants/errors.constants");
+
 const formats = require("./formats/format.rollup");
 
 /**
@@ -8,7 +10,7 @@ const formats = require("./formats/format.rollup");
  * @param {Array<>} board
  */
 function validateBoard(board = []) {
-    if (!board || !Array.isArray(board)) throw new Error("Main/Side/Command is missing or is not an array");
+    if (!board || !Array.isArray(board)) throw new Error(errors.BOARD_ERROR);
     return board;
 };
 
@@ -19,11 +21,14 @@ function validateBoard(board = []) {
  * @param {*} userFormat - user supplied format - defaults to empty string
  */
 function validateFormat(userFormat = "") {
+    if (!userFormat) throw new Error(errors.MISSING_FORMAT);
+
     const format = userFormat.toLowerCase().trim();
-    if (!format) throw new Error("Missing format");
+
+    if (!format) throw new Error(errors.MISSING_FORMAT);
 
     const officalFormat = allowedFormats[format];
-    if (!officalFormat) throw new Error("Unknown format");
+    if (!officalFormat) throw new Error(errors.UNKNOWN_FORMAT);
 
     return officalFormat;
 };
@@ -41,10 +46,9 @@ function validateFormat(userFormat = "") {
  */
 function validateLegality(deck, format) {
     const legalityChecker = formats[format];
-    if (typeof legalityChecker !== "function") throw new Error("Cannot find leglity checker for unknown format");
+    if (typeof legalityChecker !== "function") throw new Error(errors.UNKNOWN_LEGALITY_CHECKER);
 
-    const { errors, warnings } = legalityChecker(deck);
-    return { errors, warnings };
+    return legalityChecker(deck);
 }
 
 module.exports = {

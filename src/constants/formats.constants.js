@@ -43,6 +43,8 @@ const sideboardFormats = [
 ];
 
 module.exports = {
+    formats,
+
     allowedFormats,
     commandZoneFormats,
     sideboardFormats,

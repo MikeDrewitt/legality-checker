@@ -10,7 +10,10 @@
  * @param {*} next
  */
 function globalErrorHandler(err, req, res, next) {
-    if (err instanceof Error) res.status(400).send(err.message);
+    if (err instanceof Error) {
+        if (err.message === "Unimplemented") res.status(501).send("Format has not been implemented");
+        else res.status(400).send(err.message);
+    }
     res.status(400).send(err);
 };
 

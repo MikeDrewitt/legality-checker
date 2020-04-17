@@ -8,9 +8,7 @@ async function post(req, res, next) {
   const { mainboard, sideboard, commandZone, format } = body;
 
   try {
-
     const validatedFormat = validateFormat(format);
-
     const validatedMainboard = validateBoard(mainboard);
     const validatedCommandZone = validateBoard(commandZone);
     const validatedSideboard = validateBoard(sideboard);

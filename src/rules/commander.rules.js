@@ -1,6 +1,6 @@
 
 // Messages
-const { messages } = require("../constants/legality.constants");
+const messages = require("../constants/legality.constants");
 
 // Rules
 const { altCommanders } = require("./altCommanders.rules");
@@ -39,4 +39,21 @@ function commanderRules(exceptions, errors) {
     errors.push(messages.TOO_MANY_COMMANDERS);
 };
 
-module.exports = commanderRules;
+/**
+ * - Commander mainboard exceptions
+ *   - Basics & Rats & Apostles have no limitations
+ *   - Check the count for dwarves :P
+ *
+ * @param {Array<Object>} exceptions -  an array of card like objects that need futher validation for being a commander
+ * @param {Messages} errors - Object that we can add errors to should we find any
+ */
+function mainboardRules(exceptions, errors) {
+    for (const card of exceptions) {
+        if (card.name === "Seven Dwarves" && card.quantity > 7) errors.push(messages.SEVEN_DWARVES);
+    }
+};
+
+module.exports = {
+    commanderRules,
+    mainboardRules,
+};
