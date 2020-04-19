@@ -7,7 +7,8 @@ const messages = require("../../constants/legality.constants");
 
 // Rules
 const { unlimitedCopies, ruleBreakingCommanders } = require("../../rules/index.rules");
-const rules = require("../../rules/commander.rules");
+const commanderRules = require("../../rules/commander.rules");
+const genericRules = require("../../rules/generic.rules");
 
 /**
  * Legality checker for commander
@@ -62,7 +63,7 @@ module.exports = function(deck) {
         if (typeLine.indexOf("creature") === -1) errors.push(messages.CREATURE_COMMANDER, commander);
     }
 
-    if (commandZoneExceptions.length) rules.commanderRules(commandZoneExceptions, errors);
+    if (commandZoneExceptions.length) commanderRules.commanderRules(commandZoneExceptions, errors);
     else if (commandZoneQuantity === 0) errors.push(messages.MISSING_COMMANDER);
     else if (commandZoneQuantity > 1) errors.push(messages.SINGLE_COMMANDER);
 
@@ -86,7 +87,7 @@ module.exports = function(deck) {
         if (card.quantity > 1) errors.push(messages.SINGLETON_FORMAT, card);
     }
 
-    if (mainboardExceptions.length) rules.mainboardRules(mainboardExceptions, errors);
+    if (mainboardExceptions.length) genericRules.mainboardRules(mainboardExceptions, errors);
     if (mainboardQuantity !== 100) errors.push(messages.EDH_EXPECTED_DECK_SIZE);
 
     return { errors: errors.data, warnings: warnings.data };

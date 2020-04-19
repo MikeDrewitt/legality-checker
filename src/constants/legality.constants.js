@@ -10,10 +10,21 @@ module.exports = {
     TOO_MANY_COMMANDERS: "You may never have more than two commanders",
     COMMANDER_REQUIRED_IN_MAINBOARD: "Commander is expected to be included in mainboard as well as command zone",
 
+    // Oathbreaker
+    COMMANDER_SIG_SPELL_REQUIRED_IN_MAINBOARD: "Commander/ Signiture spell is expected to be included in mainboard as well as commandzone",
+    SINGLE_OATHBREAKER_AND_SIG_SPELL: "Deck expected to only include a single Oathbreaker and a single Signature Spell",
+
     // Singleton messages
     IGNORING_SIDEBOARD: "Traditionally this format doesn't use a sideboard, therefore it's being ignored",
 
+    // Sideboard formats
+    SIDEBOARD_EXPECTED_SIZE: "Sideboard must be exactly 15 cards",
+
+    // Vintage
+    VINTAGE_RESTRICTED: "Restricted cards may have no more than 1 copy in a deck",
+
     // All formats
     ILLEGAL_CARD: "This card is illegal in the supplied format",
+    TOO_MANY_COPIES: "You may only have up to 4 copies of a card in the main + sideboard",
     SEVEN_DWARVES: "A deck can contain at most 7 copies of Seven Dwarves",
 };

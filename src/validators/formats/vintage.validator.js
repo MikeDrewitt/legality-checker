@@ -2,5 +2,5 @@
  * @params {Object - {mainboard, sideboard, maybeboard}}
  */
 module.exports = function(deck) {
-    throw new Error("Unimplemented");
+    return { errors: [], warnings: [] };
 };

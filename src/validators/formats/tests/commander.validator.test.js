@@ -10,7 +10,8 @@ const exceptions = require("../../../rules/index.rules");
 const cardFactory = require("../../../factories/card.factory");
 
 // Spies
-const rules = require("../../../rules/commander.rules");
+const commanderRules = require("../../../rules/commander.rules");
+const genericRules = require("../../../rules/generic.rules");
 
 describe("Commander Validator Tests", () => {
 
@@ -24,7 +25,7 @@ describe("Commander Validator Tests", () => {
       sideboard: [],
       commandZone: [],
     };
-  })
+  });
 
   test("No cards in request returns expected response structure", () => {
     response = validator(request);
@@ -120,7 +121,7 @@ describe("Commander Validator Tests", () => {
     });
 
     test("Exception cards call to the commander exception handler", () => {
-      const rulesSpy = jest.spyOn(rules, "commanderRules");
+      const rulesSpy = jest.spyOn(commanderRules, "commanderRules");
 
       // We're gonna use our first alt commander as an example
       const altCommanderName = Object.keys(exceptions.ruleBreakingCommanders)[0];
@@ -183,7 +184,7 @@ describe("Commander Validator Tests", () => {
     });
 
     test("Exception cards call to the mainboard exception handler", () => {
-      const rulesSpy = jest.spyOn(rules, "mainboardRules");
+      const rulesSpy = jest.spyOn(genericRules, "mainboardRules");
 
       // We're gonna use our first alt commander as an example
       const anyNumberName = Object.keys(exceptions.unlimitedCopies)[0];
