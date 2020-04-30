@@ -9,6 +9,10 @@ const morgan = require("morgan");
 const routes = require("./src/routers/routes");
 const errorHandler = require("./src/middleware/errorHandler.middleware");
 
+// Env
+// I know this isn't used here, but it's forcing dotenv to be required as early as possible in the app boot process
+const config = require("./config");
+
 const app = express();
 
 // Libraries
