@@ -1,7 +1,9 @@
 // Libraries
 const axios = require("axios");
 
-const SCRY_API_URL = "https://api.scryfall.com/cards/";
+const CardService = require("../services/card.service");
+
+const SCRY_API_URL = "https://api.scryfall.com/cards/named?exact=";
 
 /**
  * Looks up an array of cards by their IDs. Really this is just a helper function so we don't have to much up
@@ -16,15 +18,23 @@ const SCRY_API_URL = "https://api.scryfall.com/cards/";
  */
 function fetchCards(cards = []) {
   return Promise.all(cards.map((card, index) => {
-    if (!card.id) throw new Error(`Missing ID at index ${index}`);
+    if (!card.name) throw new Error(`Missing name for card at index - ${index}`);
 
-    return axios.get(SCRY_API_URL + card.id).then(res => {
+    // Checking local card map so we can skip the network request if possible
+    const localCardData = CardService.get(card.name);
+    if (localCardData) return Promise.resolve({ ...serializeScryfall(localCardData), quantity: card.quantity });
+
+    return axios.get(SCRY_API_URL + card.name).then(res => {
       // TODO - We can probably remove the serialization
       // I'm adding it such that we cut down the amount of actual logistics
       // needed in the actual legality checking
       return { ...serializeScryfall(res.data), quantity: card.quantity };
     });
-  }));
+  }))
+    .catch(err => {
+      if (err.response.status === 404) throw new Error(`404 could not find - ${err.response.request.path}`);
+      throw err;
+    });
 }
 
 

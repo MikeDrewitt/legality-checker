@@ -15,7 +15,7 @@ const webhook = new IncomingWebhook(config.SLACK_WEBHOOK);
  * @param {string | IncomingWebhookSendArguments} message
  */
 function send(message) {
-
+  if (config.NODE_ENV === "local") return console.log(`Slack message substitute - ${message}`)
   if (typeof message === 'string') return webhook.send({ text: message });
   return webhook.send(...message);
 }

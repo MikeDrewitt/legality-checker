@@ -1,9 +1,9 @@
 
-const SlackService = require('../services/slack.service');
+const CardService = require('../services/card.service');
 
 async function get(req, res, next) {
     try {
-        res.status(200).send("Archidekt Legality API - Ok");
+        res.status(200).send();
     } catch(err) {
         next(err);
     }

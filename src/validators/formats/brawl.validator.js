@@ -35,11 +35,11 @@ module.exports = function(deck) {
         // rather than returning an error object, request will 400
         if (!mainboard.filter(card => card.name === commander.name).length)
             throw new Error(`${messages.COMMANDER_REQUIRED_IN_MAINBOARD} - ${commander.name}`);
-        
+
         commandZoneQuantity += parseInt(commander.quantity);
 
         if (commander.quantity > 1) errors.push(messages.SINGLETON_FORMAT, commander);
-        if (commander.legalities.commander !== "legal") errors.push(messages.ILLEGAL_CARD, commander);
+        if (commander.legalities.brawl !== "legal") errors.push(messages.ILLEGAL_CARD, commander);
 
         const typeLine = commander.typeLine.toLowerCase();
 
@@ -54,7 +54,7 @@ module.exports = function(deck) {
     for (const card of mainboard) {
         mainboardQuantity += parseInt(card.quantity);
 
-        if (card.legalities.commander !== "legal") errors.push(messages.ILLEGAL_CARD, card);
+        if (card.legalities.brawl !== "legal") errors.push(messages.ILLEGAL_CARD, card);
 
         for (const color of card.colorIdentity) {
             if (!commanderColorIdentity[color]) errors.push(messages.OUTSIDE_COLOR_IDENTITY, card);
