@@ -136,7 +136,7 @@ describe("Oathbreaker Validator Tests", () => {
 
             response = validator(request);
 
-            expect(response.errors.includes(errors.EDH_EXPECTED_DECK_SIZE)).toBeTruthy();
+            expect(response.errors.includes(errors.BRAWL_EXPECTED_DECK_SIZE)).toBeTruthy();
         });
 
         test("Error - cards outside of oathbreaker color identity", () => {

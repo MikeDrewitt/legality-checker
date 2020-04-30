@@ -78,7 +78,7 @@ describe("Generic Validator Tests", () => {
 
             response = validator(request);
 
-            expect(response.errors.includes(legalityErrors.EDH_EXPECTED_DECK_SIZE)).toBeTruthy();
+            expect(response.errors.includes(legalityErrors.EXPECTED_DECK_SIZE)).toBeTruthy();
         });
 
         test.each([5, 9, 22])("Error - may only have up to 4 copies of each card (testing %s)", cardQty => {

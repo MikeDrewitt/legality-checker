@@ -8,6 +8,9 @@ const errors = require("../../../constants/legality.constants");
 // Utils
 const cardFactory = require("../../../factories/card.factory");
 
+// Rules
+const exceptions = require("../../../rules/index.rules");
+
 // Spies
 const genericRules = require('../../../rules/generic.rules');
 
@@ -130,10 +133,10 @@ describe("Brawl Validator Tests", () => {
 
             response = validator(request);
 
-            expect(response.errors.includes(errors.EDH_EXPECTED_DECK_SIZE)).toBeTruthy();
+            expect(response.errors.includes(errors.BRAWL_EXPECTED_DECK_SIZE)).toBeTruthy();
         });
 
-        tst("Error - cards outside of commander color identity", () => {
+        test("Error - cards outside of commander color identity", () => {
             const commander = cardFactory.generate({ colorIdentity: [ "W", "U", "G" ] });
             const blackCard = cardFactory.generate({ colorIdentity: ["B"] });
 
@@ -146,7 +149,7 @@ describe("Brawl Validator Tests", () => {
         });
 
         test.each([4, 44, 54])("Error - may only have one copy of each card (testing %s)", cardQty => {
-            const card = cardFactory.generate({ qty: cardQty });
+            const card = cardFactory.generate({ quantity: cardQty });
 
             request.mainboard = [ card ];
 

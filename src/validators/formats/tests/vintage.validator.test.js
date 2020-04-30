@@ -9,6 +9,9 @@ const exceptions = require("../../../rules/index.rules");
 // Utils
 const cardFactory = require("../../../factories/card.factory");
 
+// Rules
+const genericRules = require("../../../rules/generic.rules");
+
 describe("Vintage Validator Tests", () => {
 
     let request;
@@ -68,14 +71,14 @@ describe("Vintage Validator Tests", () => {
     });
 
     describe("Mainboard tests", () => {
-        test.each([1 , 59, 79])("Error - deck must have exactly 60 cards (testing %s)", deckQty => {
+        test.each([1 , 44, 59])("Error - deck must have greated than 60 cards (testing %s)", deckQty => {
             const cards = cardFactory.many(deckQty);
 
             request.mainboard = cards;
 
             response = validator(request);
 
-            expect(response.errors.includes(errors.EDH_EXPECTED_DECK_SIZE)).toBeTruthy();
+            expect(response.errors.includes(errors.EXPECTED_DECK_SIZE)).toBeTruthy();
         });
 
         test.each([5, 9, 22])("Error - may only have up to 4 copies of each card (testing %s)", cardQty => {

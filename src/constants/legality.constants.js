@@ -23,8 +23,12 @@ module.exports = {
     // Vintage
     VINTAGE_RESTRICTED: "Restricted cards may have no more than 1 copy in a deck",
 
+    // Brawl
+    BRAWL_EXPECTED_DECK_SIZE: "Deck expected to have exactly 60 cards",
+
     // All formats
     ILLEGAL_CARD: "This card is illegal in the supplied format",
     TOO_MANY_COPIES: "You may only have up to 4 copies of a card in the main + sideboard",
     SEVEN_DWARVES: "A deck can contain at most 7 copies of Seven Dwarves",
+    EXPECTED_DECK_SIZE: "Deck expected to have at least 60 cards",
 };
