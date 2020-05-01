@@ -12,7 +12,7 @@ const genericRules = require("../../rules/generic.rules");
 
 /**
  * Legality checker for commander
- * The order of this logic is fairly ridged. Be sure to understand fully why the code is orderd the way that it is
+ * The order of this logic is fairly rigid. Be sure to understand fully why the code is orderd the way that it is
  * before making changes
  *
  * @params {Object - { mainboard, sideboard, maybeboard }

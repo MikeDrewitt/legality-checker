@@ -9,7 +9,7 @@ const Messages = require("../../utils/messages.utils");
 // Rules
 const genericRules = require("../../rules/generic.rules");
 
-/** 
+/**
  * @params {Object - {mainboard, sideboard, maybeboard}}
  */
 module.exports = function(deck) {
@@ -25,10 +25,14 @@ module.exports = function(deck) {
 
     let sideboardQuantity = 0;
     let mainboardQuantity = 0;
+    const cardQuantities = {};
 
     for (const card of sideboard) {
 
         sideboardQuantity += (parseInt(card.quantity));
+
+        if (cardQuantities[card.name]) cardQuantities[card.name].quantity += card.quantity;
+        else cardQuantities[card.name] = { quantity: card.quantity, legality: card.legalities.vintage };
 
         if (card.legalities.vintage !== "legal") errors.push(messages.ILLEGAL_CARD, card);
     }
@@ -45,11 +49,22 @@ module.exports = function(deck) {
             continue;
         }
 
-        // Check card quantity
+        if (cardQuantities[card.name]) cardQuantities[card.name].quantity += card.quantity;
+        else cardQuantities[card.name] = { quantity: card.quantity, legality: card.legalities.vintage };
     }
 
     if (mainboardExceptions.length) genericRules.mainboardRules(mainboardExceptions, errors);
     if (mainboardQuantity !== 60) errors.push(messages.EXPECTED_DECK_SIZE);
+
+    for (const cardName in cardQuantities) {
+        const card = cardQuantities[cardName];
+
+        const tooManyRestricted = card.legality === "restricted" && card.quantity > 1;
+        const tooManyCopies = card.quantity > 4;
+
+        if (tooManyRestricted) errors.push(messages.VINTAGE_RESTRICTED, { name: cardName });
+        else if (tooManyCopies) errors.push(messages.TOO_MANY_COPIES, { name: cardName });
+    }
 
     return { errors: errors.data, warnings: warnings.data };
 };

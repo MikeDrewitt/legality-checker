@@ -69,7 +69,7 @@ module.exports = function(deck) {
     }
 
     if (mainboardExceptions.length) genericRules.mainboardRules(mainboardExceptions, errors);
-    if (mainboardQuantity !== 60) errors.push(messages.EDH_EXPECTED_DECK_SIZE);
+    if (mainboardQuantity !== 60) errors.push(messages.BRAWL_EXPECTED_DECK_SIZE);
 
     return { errors: errors.data, warnings: warnings.data };
 };

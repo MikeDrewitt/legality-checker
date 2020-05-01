@@ -13,6 +13,9 @@ module.exports = {
     // Oathbreaker
     COMMANDER_SIG_SPELL_REQUIRED_IN_MAINBOARD: "Commander/ Signiture spell is expected to be included in mainboard as well as commandzone",
     SINGLE_OATHBREAKER_AND_SIG_SPELL: "Deck expected to only include a single Oathbreaker and a single Signature Spell",
+    OATHBREAKER_NOT_ALLOWED: "Your oathbreaker/ signiture spell is non allowed card type",
+    MISSING_OATHBREAKER: "Oathbreaker requires an oathbreaker as your commander",
+    MISSING_SIGNITURE_SPELL: "Oathbreaker requires a signiture spell card",
 
     // Singleton messages
     IGNORING_SIDEBOARD: "Traditionally this format doesn't use a sideboard, therefore it's being ignored",

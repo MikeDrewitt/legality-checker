@@ -82,13 +82,13 @@ describe("Vintage Validator Tests", () => {
         });
 
         test.each([5, 9, 22])("Error - may only have up to 4 copies of each card (testing %s)", cardQty => {
-            const card = cardFactory.generate({ qty: cardQty });
+            const card = cardFactory.generate({ quantity: cardQty });
 
             request.mainboard = [ card ];
 
             response = validator(request);
 
-            expect(response.errors.includes(`${errors.SINGLETON_FORMAT} - ${card.name}`)).toBeTruthy();
+            expect(response.errors.includes(`${errors.TOO_MANY_COPIES} - ${card.name}`)).toBeTruthy();
         });
 
         test("Error - deck may only have 1 copy of a restricted card", () => {

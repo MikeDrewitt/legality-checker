@@ -76,7 +76,7 @@ describe("Oathbreaker Validator Tests", () => {
             expect(response.errors.includes(`${errors.SINGLETON_FORMAT} - ${commander.name}`)).toBeTruthy();
         });
 
-        test("Error - Is not a planeswalker", () => {
+        test("Error - Not allowed card type", () => {
             // Doesn't matter so long as it's not a Planeswalker
             const commander = cardFactory.generate({ typeLine: "Creature" });
             const signatureSpell = cardFactory.generate({ typeLine: "Instant" });
@@ -86,8 +86,34 @@ describe("Oathbreaker Validator Tests", () => {
 
             response = validator(request);
 
-            expect(response.errors.includes(`${errors.CREATURE_COMMANDER} - ${commander.name}`)).toBeTruthy();
+            expect(response.errors.includes(`${errors.OATHBREAKER_NOT_ALLOWED} - ${commander.name}`)).toBeTruthy();
         });
+
+        test("Error - Missing oathbreaker", () => {
+             // Doesn't matter so long as it's not a Planeswalker
+             const commander = cardFactory.generate({ typeLine: "Creature" });
+             const signatureSpell = cardFactory.generate({ typeLine: "Instant" });
+
+             request.commandZone = [ commander, signatureSpell ];
+             request.mainboard = [ commander, signatureSpell ];
+
+             response = validator(request);
+
+             expect(response.errors.includes(errors.MISSING_OATHBREAKER)).toBeTruthy();
+        });
+
+        test("Error - Missing signiture spell", () => {
+            const commander = cardFactory.generate({ typeLine: "Planeswalker" });
+            // Doesn't matter so long as it's not a Spell
+            const signatureSpell = cardFactory.generate({ typeLine: "Enchantment" });
+
+            request.commandZone = [ commander, signatureSpell ];
+            request.mainboard = [ commander, signatureSpell ];
+
+            response = validator(request);
+
+            expect(response.errors.includes(errors.MISSING_SIGNITURE_SPELL)).toBeTruthy();
+       });
 
         test("Error - illegal in oathbreaker", () => {
             const commander = cardFactory.generate({ legalities: { oathbreaker: 'illegal' } });
@@ -98,23 +124,6 @@ describe("Oathbreaker Validator Tests", () => {
             response = validator(request);
 
             expect(response.errors.includes(`${errors.ILLEGAL_CARD} - ${commander.name}`)).toBeTruthy();
-        });
-
-        test("Exception cards call to the mainboard exception handler", () => {
-            const rulesSpy = jest.spyOn(oathbreakerRules, "oathbreakerRules");
-
-            // We're gonna use our first alt commander as an example
-            const altCommanderName = Object.keys(exceptions.ruleBreakingCommanders)[0];
-            const commander = cardFactory.generate({ name: altCommanderName, legalities: { commander: "legal" } });
-
-            request.commandZone = [ commander ];
-            request.mainboard = [ commander ];
-
-            response = validator(request);
-
-            expect(rulesSpy).toBeCalled();
-            // Checking the first argument. I'm not sure if there's a better way to check the arguments
-            expect(rulesSpy.mock.calls[0][0]).toStrictEqual([ commander ]);
         });
     });
 
@@ -152,7 +161,7 @@ describe("Oathbreaker Validator Tests", () => {
         });
 
         test.each([4, 44, 54])("Error - may only have one copy of each card (testing %s)", cardQty => {
-            const card = cardFactory.generate({ qty: cardQty });
+            const card = cardFactory.generate({ quantity: cardQty });
 
             request.mainboard = [ card ];
 

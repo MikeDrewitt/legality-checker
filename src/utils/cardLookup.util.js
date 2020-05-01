@@ -1,7 +1,11 @@
 // Libraries
 const axios = require("axios");
 
+// Services
 const CardService = require("../services/card.service");
+
+// Constants
+const oathbreakerBanList = require("../rules/oathbreakerBanList.rules");
 
 const SCRY_API_URL = "https://api.scryfall.com/cards/named?exact=";
 
@@ -37,7 +41,6 @@ function fetchCards(cards = []) {
     });
 }
 
-
 /**
  * This function is used to convert scryfall's card structure into something a bit nicer for us to deal with.
  * Doing this after the request is returned allows us to cut down on the gross string parsing in the legality checkers
@@ -48,6 +51,10 @@ function fetchCards(cards = []) {
  * @returns {Object} - legalityCardObject
  */
 function serializeScryfall(scryfallCard) {
+
+  // TODO - add oathbreaker legality here
+  const oathbreakerLegality = oathbreakerBanList[scryfallCard.name] || "legal";
+
   return {
     name: scryfallCard["name"],
     cmc: scryfallCard["cmc"],
@@ -56,7 +63,7 @@ function serializeScryfall(scryfallCard) {
     colors: scryfallCard["colors"],
     colorIdentity: scryfallCard["color_identity"],
     typeLine: scryfallCard["type_line"],
-    legalities: scryfallCard["legalities"],
+    legalities: { ...scryfallCard["legalities"], oathbreaker: oathbreakerLegality },
   };
 }
 
