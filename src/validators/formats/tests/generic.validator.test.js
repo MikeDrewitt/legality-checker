@@ -76,27 +76,31 @@ describe("Generic Validator Tests", () => {
 
             request.mainboard = cards;
 
-            response = validator(request);
+            response = validator(request, format);
 
             expect(response.errors.includes(legalityErrors.EXPECTED_DECK_SIZE)).toBeTruthy();
         });
 
         test.each([5, 9, 22])("Error - may only have up to 4 copies of each card (testing %s)", cardQty => {
-            const card = cardFactory.generate({ qty: cardQty });
+            const card = cardFactory.generate({ quantity: cardQty });
 
             request.mainboard = [ card ];
 
-            response = validator(request);
+            response = validator(request, format);
 
-            expect(response.errors.includes(`${legalityErrors.SINGLETON_FORMAT} - ${card.name}`)).toBeTruthy();
+            expect(response.errors.includes(`${legalityErrors.TOO_MANY_COPIES} - ${card.name}`)).toBeTruthy();
         });
 
-        test.each()("Error - illegal card in format", () => {
-            const card = cardFactory.generate({ legalities: { format: 'illegal' } });
+        test.each([
+            formats.STANDARD, formats.MODERN, formats.PAUPER
+        ])("Error - illegal card in %s", dynamicFormat => {
+            const card = cardFactory.generate();
+
+            card.legalities[dynamicFormat] = 'illegal';
 
             request.mainboard = [ card ];
 
-            response = validator(request);
+            response = validator(request, dynamicFormat);
 
             expect(response.errors.includes(`${legalityErrors.ILLEGAL_CARD} - ${card.name}`)).toBeTruthy();
         });
@@ -110,7 +114,7 @@ describe("Generic Validator Tests", () => {
 
             request.mainboard = [ card ];
 
-            response = validator(request);
+            response = validator(request, format);
 
             expect(rulesSpy).toBeCalled();
             expect(rulesSpy.mock.calls[0][0]).toStrictEqual([ card ]);
